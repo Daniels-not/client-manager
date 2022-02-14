@@ -1,5 +1,5 @@
-# Front end Adventure Blog Post 🎄🎁
-![index]() ![list]()
+# Client Manager made with Django
+![index]() ![list](https://github.com/Daniels-not/client-manager/blob/main/List.PNG)
 
 ## Instructions 📑
 
