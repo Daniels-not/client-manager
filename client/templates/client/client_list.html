@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        {% extends 'client/base.html' %}
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content %}
+            <div class="table-responsive">
+                <table class="table table table-borderless">
+                    <thead class="border-bottom font-weight-bold">
+                        <tr>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Date Added</th>
+                            <a href="{% url 'client_form' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-plus fa-lg"></i> Create new client
+                            </a>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in client_list %}
+    
+                            <tr>
+                                <td>{{client.fullname}}</td>
+                                <td><address>{{client.address}}</address></td>
+                                <td>{{client.email}}</td>
+                                <td>{{client.phone}}</td>
+                                <td>{{client.date_created}}</td>
+                                <td>
+                                    <a href="{% url 'client_update' client.id %}" class="btn text-secondary px-0">
+                                        <i class="far fa-edit fa-lg"></i>
+                                    </a>
+                                    <form action="{% url 'client_delete' client.id%}" method="post" class="d-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn text-danger px-0">
+                                            <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+    
+                        {% endfor %}
+    
+                    </tbody>
+                </table>
+            </div>
+        {% endblock content %}
+
+        <script src="" async defer></script>
+    </body>
+</html>

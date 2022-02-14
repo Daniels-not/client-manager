@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        {% extends 'client/base.html' %}
+        {% load crispy_forms_tags %}
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block content %}
+            <form action="" method="post" autocomplete="off">
+                {% csrf_token %}
+                <div class="my-3">
+                    {{form.fullname|as_crispy_field}}
+                </div>
+                <div class="my-3">
+                    {{form.address|as_crispy_field}}
+                    <div id="tags" class="my-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        {{form.email|as_crispy_field}}
+                    </div>
+                    <div class="col-md-8">
+                        {{form.phone|as_crispy_field}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-block btn-lg mt-3 w-100"><i class="far fa-save fa-lg"></i> Save</button>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'client_list' %}" class="btn btn-secondary btn-block btn-lg mt-3 w-100">
+                            <i class="fas fa-list-ul fa-lg"></i> List
+                        </a>
+                    </div>
+                </div>
+            </form>
+            <script type="text/javascript">
+                const choices_tag = document.getElementById('tags');
+                const textarea = document.getElementById('address');
+
+                const telephone = document.getElementById('phone');
+
+                function createTag(text) {
+                    // if you use a (',') and then write a tag it will create a tag
+                    // if you don't use a (',') and you don't write a tag it will not create a tag
+                    const tag = text.split(',').filter(choice => choice.trim() !== '').map(choice => choice.trim());
+
+                    choices_tag.innerHTML = '';
+
+                    tag.forEach(choice => {
+                        const span = document.createElement('span');
+                        span.classList.add('badge', 'bg-secondary', 'fs-6', 'text', 'animate__animated', 'animate__pulse');
+                        span.innerText = choice;
+                        choices_tag.appendChild(span);
+                    })
+                }
+
+
+                textarea.addEventListener('keydown', function(e) {
+                    createTag(e.target.value);
+                })
+
+                telephone.addEventListener('keyup', function(){ // keyup is a event
+                    let phoneValue = telephone.value; // get the value of the input
+                    let output; // variable to store the output
+                    phoneValue = phoneValue.replace(/[^0-9]/g, ''); // replace all non-numeric characters with nothing
+                        var area = phoneValue.substr(0, 3);
+                        var pre = phoneValue.substr(3, 3);
+                        var tel = phoneValue.substr(6, 4);
+                        if (area.length < 3) { // if the area code is less than 3 digits
+                            output = "(" + area;
+                        }
+                        else if (area.length == 3 && pre.length < 3) { // if the area code is 3 digits and the prefix is less than 3 digits
+                            output = "(" + area + ")" + " " + pre;
+                        }
+                        else if (area.length == 3 && pre.length == 3) { // if the area code is 3 digits and the prefix is 3 digits
+                            output = "(" + area + ")" + " " + pre + " - "+tel;
+                        }
+                        telephone.value = output;
+
+                });
+            </script>
+        {% endblock content %}
+
+    </body>
+</html>
